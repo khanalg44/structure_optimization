@@ -1,0 +1,40 @@
+#!/bin/bash
+#set -x
+########################################################################
+# SUN Grid Engine job wrapper
+# parallel job on opteron queue
+########################################################################
+#$ -N fs
+#$ -pe mpi2_14_one 16
+#$ -q wp15
+#$ -j y
+#$ -M khanalg44@gmail.com
+#$ -m e
+#$ -v WIEN_DMFT_ROOT,WIENROOT,LD_LIBRARY_PATH
+########################################################################
+# DON'T remove the following line!
+source $TMPDIR/sge_init.sh
+source ~/.bashrc
+########################################################################
+export SMPD_OPTION_NO_DYNAMIC_HOSTS=1
+export OMP_NUM_THREADS=1
+export SCRATCH="."
+export LD_LIBRARY_PATH=/opt/intel/mkl/lib/intel64/:/opt/intel/lib/intel64/:/opt/intel/composer_xe_2013_sp1.3.174/compiler/lib/intel64/:$LD_LIBRARY_PATH
+export PYTHONPATH=$PYTHONPATH:.:/usr/local/lib64/python2.7/site-packages/:$WIEN_DMFT_ROOT
+
+JOBNAME="fs"    # must be equal to case name
+echo $JOBNAME; mkdir $JOBNAME ; mv * $JOBNAME ; cd $JOBNAME;
+
+mpi_prefix="/opt/mpich2/intel/14.0/bin/mpiexec  -np $NSLOTS  -machinefile $TMPDIR/machines -port $port -env OMP_NUM_THREADS 1 -envlist SCRATCH,LD_LIBRARY_PATH,WIEN_DMFT_ROOT,WIENROOT,PYTHONPATH"
+echo $mpi_prefix > mpi_prefix.dat
+cp $TMPDIR/machines xmachines
+$WIEN_DMFT_ROOT/createW2kmachinef.py $JOBNAME.klist $TMPDIR/machines
+
+./optimize.sh  >> wnohup.dat
+
+rm -r $JOBNAME.vector*
+find . -size 0 |xargs rm
+
+mv * ..
+cd ..
+rm -rf $JOBNAME
