@@ -7,11 +7,10 @@ converged value of energy and store it to some file.
 # How to Run this code 
 
 
-##      1. struct file with original lattice constants with name a0c0.struct
-##      2. a0c0.inM file for the relaxation of the internal parameter
-##      3. Of course this script optimize.sh
-##      4. If you are submitting to cluster then a submit script 
-##         where the path to Wien2k executible is defined.
+* struct file with original lattice constants with name a0c0.struct
+* a0c0.inM file for the relaxation of the internal parameter
+* Of course this script optimize.sh
+* If you are submitting to cluster then you need a submit script in which the path to Wien2k executible is defined.
 
 # TO DO LIST FOR THIS SCRIPT
 1. Check the length of a_new and c_new and find if it's equal to original a and c
