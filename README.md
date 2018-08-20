@@ -6,6 +6,7 @@ converged value of energy and store it to some file.
 
 # How to Run this code 
 
+Here are the files you need before you use this script
 
 * struct file with original lattice constants with name a0c0.struct
 * a0c0.inM file for the relaxation of the internal parameter
